@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import { Guitar, Header } from './components'
 import { db } from './data/db'
 
@@ -7,15 +7,20 @@ import './App.css'
 function App() {
 
     const [data, setData] = useState(db)
-    const [cart, setCart] = useState([])
+    const [cart, setCart] = useState(localStorage.getItem('cart') ? JSON.parse(localStorage.getItem('cart')) : [])
 
     const MAX_ITEMS = 5
     const MIN_ITEMS = 1
+
+    useEffect(() => {
+        localStorage.setItem('cart', JSON.stringify(cart))
+    },[cart])
 
     const addToCart = item => {
 
         const itemExists = cart.findIndex( guitar => guitar.id === item.id)
         if (itemExists >= 0 ) {
+            if(cart[itemExists].quantity >= MAX_ITEMS) return
             console.log("Este elemento ya existe")
             const updatedCart = [...cart]
             updatedCart[itemExists].quantity++

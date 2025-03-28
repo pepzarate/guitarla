@@ -7,16 +7,60 @@ import './App.css'
 function App() {
 
     const [data, setData] = useState(db)
+    const [cart, setCart] = useState([])
 
-    return (
+    const MAX_ITEMS = 5
+
+    const addToCart = item => {
+
+        const itemExists = cart.findIndex( guitar => guitar.id === item.id)
+        if (itemExists >= 0 ) {
+            console.log("Este elemento ya existe")
+            const updatedCart = [...cart]
+            updatedCart[itemExists].quantity++
+            setCart(updatedCart)
+        } else {
+            console.log("Agregando...")
+            item.quantity = 1
+            setCart([...cart, item])
+        }
+    }
+
+    const removeFromCart = id => {
+        setCart(prevState => prevState.filter( guitar => id !== guitar.id))
+    }
+
+    const increaseQuantity = id => {
+        const updatedCart = cart.map( item => {
+            if(item.id === id && item.quantity < MAX_ITEMS){
+                return {
+                    ...item,
+                    quantity: item.quantity + 1
+                }
+            }
+            return item
+        })
+        setCart(updatedCart)
+    }
+
+    return (    
         <>
-        <Header />
+        <Header
+            cart={cart}
+            removeFromCart={removeFromCart}
+            increaseQuantity={increaseQuantity}
+         />
         <main className="container-xl mt-5">
             <h2 className="text-center">Nuestra Colección</h2>
 
             <div className="row mt-5">
                 {data.map(guitar => (
-                    <p key={guitar.id}>{guitar.name}</p>
+                    <Guitar
+                        key={guitar.id}
+                        guitar={guitar}
+                        setCart={setCart}
+                        addToCart={addToCart}
+                    />
                 ))}
             </div>
         </main>

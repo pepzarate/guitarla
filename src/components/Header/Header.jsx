@@ -1,4 +1,4 @@
-export const Header = ({ cart, removeFromCart, increaseQuantity }) => {
+export const Header = ({ cart, removeFromCart, increaseQuantity, decreaseQuantity, emptyCart }) => {
 
     const isEmpty = () => cart.length === 0
     const cartTotal = () => cart.reduce((total, item) => total + (item.quantity * item.price),0)
@@ -43,7 +43,7 @@ export const Header = ({ cart, removeFromCart, increaseQuantity }) => {
                                                             <td className="fw-bold">${item.price}
                                                             </td>
                                                             <td className="flex align-items-start gap-4">
-                                                                <button type="button" className="btn btn-dark">-
+                                                                <button type="button" className="btn btn-dark" onClick={() => decreaseQuantity(item.id)}>-
                                                                 </button>
                                                                     {item.quantity}
                                                                 <button type="button" className="btn btn-dark" onClick={() => increaseQuantity(item.id)}>+
@@ -60,7 +60,7 @@ export const Header = ({ cart, removeFromCart, increaseQuantity }) => {
                                             </tbody>
                                         </table>
                                     <p className="text-end">Total pagar: <span className="fw-bold">${cartTotal()}</span></p>
-                                    <button className="btn btn-dark w-100 mt-3 p-2">Vaciar Carrito</button>
+                                    <button className="btn btn-dark w-100 mt-3 p-2" onClick={() => emptyCart()}>Vaciar Carrito</button>
                                 </>    
                                 )
                                 }

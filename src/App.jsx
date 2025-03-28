@@ -10,6 +10,7 @@ function App() {
     const [cart, setCart] = useState([])
 
     const MAX_ITEMS = 5
+    const MIN_ITEMS = 1
 
     const addToCart = item => {
 
@@ -43,12 +44,29 @@ function App() {
         setCart(updatedCart)
     }
 
+    const decreaseQuantity = id => {
+        const updatedCart = cart.map( item => {
+            if(item.id === id && item.quantity > MIN_ITEMS){
+                return {
+                    ...item,
+                    quantity: item.quantity - 1
+                }
+            }
+            return item
+        })
+        setCart(updatedCart)
+    }
+
+    const emptyCart = () => setCart([])
+
     return (    
         <>
         <Header
             cart={cart}
             removeFromCart={removeFromCart}
             increaseQuantity={increaseQuantity}
+            decreaseQuantity={decreaseQuantity}
+            emptyCart={emptyCart}
          />
         <main className="container-xl mt-5">
             <h2 className="text-center">Nuestra Colección</h2>
